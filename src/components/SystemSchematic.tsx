@@ -1,13 +1,6 @@
-/**
- * SystemSchematic — professional engineering schematic
- * Fixed to pull all values, closure times, threshold scales, and parameters
- * directly from the active live simulation states.
- */
-
 import React, { useMemo, useState } from 'react'
 import type { SimulationStep } from './simulation'
 
-// ── Layout constants (SVG coordinate space, viewBox 680 × 340) ──────────────
 const PIPE_X0 = 120
 const PIPE_X1 = 504
 const PIPE_Y_TOP = 148

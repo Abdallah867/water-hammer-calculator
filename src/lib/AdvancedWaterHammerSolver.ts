@@ -7,7 +7,7 @@ import type {
 export class AdvancedWaterHammerSolver implements IWaterHammerSolver {
   private readonly L = 600
   private readonly a = 300
-  private readonly D = 0.5
+  private readonly D = 0.05
   private readonly f = 0.04
   private readonly k = 0.1
   private readonly H_res_initial = 2 // Rename to keep track of initial height

@@ -26,7 +26,6 @@ export const SimulationConfigDialog: React.FC<ConfigDialogProps> = ({
   onClose,
   onConfirmRun,
 }) => {
-  // Initialize inputs with your exact standard default engineering constraints
   const [config, setConfig] = useState<SimulationConfig>({
     L: 3750,
     a: 1250,

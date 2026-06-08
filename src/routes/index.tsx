@@ -18,14 +18,18 @@ import {
   type SimulationConfig,
 } from '#/components/ConfigurationDialog'
 import { SimulationCharts } from '#/components/SimulationCharts'
+import { TransientDashboard } from '#/components/TransientDashboard'
 
 export const Route = createFileRoute('/')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  const [solverType, setSolverType] = useState<'basic' | 'advanced'>('advanced')
+  const [solverType, setSolverType] = useState<'basic' | 'advanced'>('basic')
   const [timeStepIndex, setTimeStepIndex] = useState(0)
+  const [dynamicConfig, setDynamicConfig] = useState<SimulationConfig | null>(
+    null,
+  )
 
   // Swapping engine objects dynamically via the interface
   const currentSolver: IWaterHammerSolver = useMemo(() => {
@@ -40,7 +44,7 @@ function RouteComponent() {
   const handleStartSimulation = (dynamicConfig: SimulationConfig) => {
     // Construct your MOC class instance instantly with dynamic parameters
     const runner = new AdvancedWaterHammerSolver()
-    const results = runner.simulate(50)
+    const results = runner.simulate(5000)
     setTimeStepIndex(0)
   }
 
@@ -73,6 +77,7 @@ function RouteComponent() {
           >
             <RefreshCw size={16} /> Reset
           </button>
+
           <button className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 shadow-sm transition-all">
             <Play size={16} /> Run Simulation
           </button>
@@ -84,13 +89,13 @@ function RouteComponent() {
         <MetricCard
           icon={<Droplet className="text-blue-500" />}
           label="Initial Flow"
-          value="0.176"
+          value={currentStep.nodes[0].Q.toFixed(4)}
           unit="m³/s"
         />
         <MetricCard
           icon={<Wind className="text-indigo-500" />}
           label="Wave Speed"
-          value="1250"
+          value={300}
           unit="m/s"
         />
         <MetricCard
@@ -179,6 +184,39 @@ function RouteComponent() {
               <span>Reflected</span>
             </div>
           </div>
+          <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+            <h3 className="mb-4 font-semibold text-slate-700">
+              Reservoir Head Mode
+            </h3>
+
+            <div className="flex gap-2">
+              <button
+                onClick={() => setSolverType('basic')}
+                className={`flex-1 rounded-lg px-3 py-2 text-sm font-medium border ${
+                  solverType === 'basic'
+                    ? 'bg-blue-600 text-white border-blue-600'
+                    : 'bg-white text-slate-700 border-slate-200'
+                }`}
+              >
+                Constant
+              </button>
+
+              <button
+                onClick={() => setSolverType('advanced')}
+                className={`flex-1 rounded-lg px-3 py-2 text-sm font-medium border ${
+                  solverType === 'advanced'
+                    ? 'bg-blue-600 text-white border-blue-600'
+                    : 'bg-white text-slate-700 border-slate-200'
+                }`}
+              >
+                Variable
+              </button>
+            </div>
+
+            <p className="mt-2 text-xs text-slate-400">
+              Controls reservoir boundary condition behavior
+            </p>
+          </div>
         </div>
       </div>
       {/* <SimulationCharts currentStep={currentStep} solverType={solverType} /> */}
@@ -188,10 +226,14 @@ function RouteComponent() {
         solverType={solverType}
       />
 
-      <SimulationCharts
+      {/* <SimulationCharts
         currentStep={currentStep}
         allSteps={results}
         solverType={solverType}
+      /> */}
+      <TransientDashboard
+        simulationHistory={results}
+        totalNodes={currentStep.nodes.length - 1}
       />
     </div>
   )
