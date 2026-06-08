@@ -51,7 +51,7 @@ function RouteComponent() {
   }
 
   // Triggers recalculation on switch automatically
-  const results = useMemo(() => currentSolver.simulate(100), [currentSolver])
+  const results = useMemo(() => currentSolver.simulate(1000), [currentSolver])
   const currentStep = results[timeStepIndex] || results[0]
 
   return (
