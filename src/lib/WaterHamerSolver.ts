@@ -7,7 +7,7 @@ import type {
 export class WaterHammerSolver implements IWaterHammerSolver {
   private readonly L = 600
   private readonly a = 300
-  private readonly D = 0.05
+  public D = 0.5
   private readonly f = 0.04
   private readonly k = 0.1
   private readonly H_res_initial = 2 // Rename to keep track of initial height
@@ -42,7 +42,8 @@ export class WaterHammerSolver implements IWaterHammerSolver {
   // Steady state valve values needed for your handwritten Cv formula
   private readonly H0_valve: number
 
-  constructor() {
+  constructor(d?: number) {
+    this.D = d ?? 0.5
     this.dx = this.L / this.n
     this.dt = this.dx / this.a
     this.A = (Math.PI * Math.pow(this.D, 2)) / 4

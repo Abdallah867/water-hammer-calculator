@@ -92,7 +92,7 @@ export const TransientDashboard: React.FC<TransientDashboardProps> = ({
         {/* GRAPH 1: PIEZOMETRIC HEAD PROFILE (H vs t) */}
         <div className="border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-zinc-950">
           <div className="mb-3 font-mono text-xs font-bold uppercase tracking-wider text-slate-500">
-            Piezometric Head ($H$) over Time
+            Piezometric Head (H) over Time
           </div>
           <div className="h-72 w-full font-mono text-[10px]">
             <ResponsiveContainer width="100%" height="100%">
@@ -152,7 +152,7 @@ export const TransientDashboard: React.FC<TransientDashboardProps> = ({
         {/* GRAPH 2: DISCHARGE VELOCITY PROFILE (Q vs t) */}
         <div className="border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-zinc-950">
           <div className="mb-3 font-mono text-xs font-bold uppercase tracking-wider text-slate-500">
-            Pipeline Discharge ($Q$) over Time
+            Pipeline Discharge (Q) over Time
           </div>
           <div className="h-72 w-full font-mono text-[10px]">
             <ResponsiveContainer width="100%" height="100%">

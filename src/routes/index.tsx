@@ -31,25 +31,27 @@ function RouteComponent() {
     null,
   )
 
+  const [diameterInput, setDiameterInput] = useState('0.5')
+
   // Swapping engine objects dynamically via the interface
   const currentSolver: IWaterHammerSolver = useMemo(() => {
     return solverType === 'basic'
-      ? new WaterHammerSolver()
-      : new AdvancedWaterHammerSolver()
-  }, [solverType])
+      ? new WaterHammerSolver(parseFloat(diameterInput))
+      : new AdvancedWaterHammerSolver(parseFloat(diameterInput))
+  }, [solverType, diameterInput])
 
   // Inside your primary control layout component:
   const [isConfigModalOpen, setIsConfigModalOpen] = useState(false)
 
   const handleStartSimulation = (dynamicConfig: SimulationConfig) => {
     // Construct your MOC class instance instantly with dynamic parameters
-    const runner = new AdvancedWaterHammerSolver()
+    const runner = new AdvancedWaterHammerSolver(parseFloat(diameterInput))
     const results = runner.simulate(5000)
     setTimeStepIndex(0)
   }
 
   // Triggers recalculation on switch automatically
-  const results = useMemo(() => currentSolver.simulate(1999), [currentSolver])
+  const results = useMemo(() => currentSolver.simulate(100), [currentSolver])
   const currentStep = results[timeStepIndex] || results[0]
 
   return (
@@ -215,6 +217,45 @@ function RouteComponent() {
 
             <p className="mt-2 text-xs text-slate-400">
               Controls reservoir boundary condition behavior
+            </p>
+          </div>
+
+          {/* --- INLINE PIPE DIAMETER QUICK CONFIG --- */}
+          <div className="rounded border border-slate-200 bg-white p-5">
+            <h3 className="mb-3 font-mono text-xs font-bold uppercase tracking-wider text-slate-500">
+              Pipe Diameter Config
+            </h3>
+
+            <div className="flex items-center gap-2 font-mono text-xs">
+              <div className="relative flex-1">
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 font-bold text-slate-400">
+                  Ø
+                </span>
+                <input
+                  type="number"
+                  step="0.01"
+                  min="0.01"
+                  placeholder="0.05"
+                  value={diameterInput}
+                  onChange={(e) => {
+                    const val = parseFloat(e.target.value)
+                    const cleanVal = isNaN(val) ? 0.01 : val
+
+                    // Smoothly patch or initialize the dynamicConfig state tree
+                    setDiameterInput(e.target.value) // Update local input state for instant feedback
+                    setTimeStepIndex(0) // Reset index to prevent out-of-bounds matrix pointer bugs
+                  }}
+                  className="h-8 w-full rounded border border-slate-200 bg-white pl-7 pr-3 outline-none transition-colors focus:border-blue-500 dark:border-slate-800 dark:bg-zinc-900"
+                />
+              </div>
+              <span className="text-slate-400 font-bold uppercase text-[11px]">
+                meters
+              </span>
+            </div>
+
+            <p className="mt-2 text-[11px] text-slate-400 font-sans">
+              Altering the area modifies fluid cross-sectional velocity profiles
+              dynamically.
             </p>
           </div>
         </div>
